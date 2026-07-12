@@ -1,0 +1,28 @@
+[project]
+name = "song-dissect"
+version = "0.1.0"
+description = "Local audio dissection pipeline: stems, tempo/key, drum one-shots, MIDI transcription"
+readme = "README.md"
+authors = [
+    { name = "Zayan", email = "zayan_k@icloud.com" }
+]
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "basic-pitch==0.4.0",
+    "demucs==4.1.0",
+    "librosa>=0.10",
+    "soundfile>=0.14.0",
+    "torch>=2.4",
+    "torchaudio>=2.4",
+    "transformers>=4.40",
+]
+
+[project.scripts]
+song-dissect = "song_dissect.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.10.8,<0.11.0"]
+build-backend = "uv_build"
+
+[tool.uv]
+environments = ["sys_platform == 'darwin' and platform_machine == 'arm64'"]
