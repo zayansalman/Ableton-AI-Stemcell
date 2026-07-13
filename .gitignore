@@ -11,3 +11,6 @@ wheels/
 
 # macOS
 .DS_Store
+
+# one-off probe scripts
+scratch_*.py
