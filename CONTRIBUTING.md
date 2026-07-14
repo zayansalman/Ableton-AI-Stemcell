@@ -1,12 +1,12 @@
-# Contributing to Ableton-AI-Stemcell
+# Contributing to Ableton-AI-Stemcell-Skill
 
 Thanks for your interest! This is a hobby project — issues, ideas, and PRs are all welcome.
 
 ## Development setup
 
 ```bash
-git clone https://github.com/zayansalman/Ableton-AI-Stemcell.git
-cd Ableton-AI-Stemcell
+git clone https://github.com/zayansalman/ableton-ai-stemcell-skill.git
+cd ableton-ai-stemcell-skill
 uv sync
 uv run stemcell bootstrap   # downloads the models (once)
 uv run python -m pytest -q  # run the tests

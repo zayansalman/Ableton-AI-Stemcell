@@ -1,9 +1,9 @@
-# Ableton-AI-Stemcell 🧬
+# Ableton-AI-Stemcell-Skill 🧬
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org)
 [![Platform: macOS Apple Silicon](https://img.shields.io/badge/platform-macOS%20Apple%20Silicon-lightgrey.svg)](#requirements)
-[![Release: v0.1.0](https://img.shields.io/badge/release-v0.1.0-brightgreen.svg)](https://github.com/zayansalman/Ableton-AI-Stemcell/releases)
+[![Release: v0.1.0](https://img.shields.io/badge/release-v0.1.0-brightgreen.svg)](https://github.com/zayansalman/ableton-ai-stemcell-skill/releases)
 [![Runs locally](https://img.shields.io/badge/audio-never%20leaves%20your%20machine-success.svg)](#)
 
 **Reverse-engineer any track and regrow it in Ableton.** Hand Stemcell a song and it dissects the audio itself — stems, tempo, key, drum one-shots, MIDI of every part — identifies the *gear* behind each sound, finds licensed look-alikes on Splice, generates catchy melodies and MK/Todd-Edwards-style vocal chops, and rebuilds the whole thing into a live Ableton project.
@@ -84,8 +84,8 @@ The pipeline writes a machine-readable `report.json` (schema v1); everything dow
 ## Install
 
 ```bash
-git clone https://github.com/zayansalman/Ableton-AI-Stemcell.git
-cd Ableton-AI-Stemcell
+git clone https://github.com/zayansalman/ableton-ai-stemcell-skill.git
+cd ableton-ai-stemcell-skill
 uv sync
 uv run stemcell bootstrap   # one-time: downloads htdemucs (~80 MB) + CLAP (~615 MB); prints disk-free
 ```
