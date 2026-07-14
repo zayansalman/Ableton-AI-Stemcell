@@ -1,0 +1,46 @@
+Ableton-AI-Stemcell
+Copyright (c) 2026 Zayan Salman
+Licensed under the MIT License (see LICENSE).
+
+================================================================================
+TRADEMARK DISCLAIMER
+================================================================================
+
+This project is NOT affiliated with, endorsed by, or sponsored by Ableton AG or
+Splice.com, Inc. "Ableton", "Ableton Live", "Simpler", "Push" and "Splice" are
+trademarks of their respective owners. Stemcell is an independent, open-source
+project that interoperates with those products. The name "Ableton-AI-Stemcell"
+describes the integration and is used nominatively; no affiliation is implied.
+
+================================================================================
+THIRD-PARTY SOFTWARE & MODELS
+================================================================================
+
+Stemcell depends on the following, installed/downloaded at runtime and NOT
+redistributed as part of this repository. Each is used under its own license:
+
+- Demucs and the htdemucs model weights — Meta Platforms, Inc. — MIT License
+  https://github.com/facebookresearch/demucs
+- basic-pitch (and its ICASSP 2022 model) — Spotify AB — Apache License 2.0
+  https://github.com/spotify/basic-pitch
+- CLAP (laion/clap-htsat-unfused) — LAION — Apache License 2.0
+  https://huggingface.co/laion/clap-htsat-unfused
+- librosa — ISC License — https://librosa.org
+- Hugging Face Transformers — Apache License 2.0
+- PyTorch / torchaudio — BSD-3-Clause / Apache-2.0
+- soundfile — BSD-3-Clause
+- NumPy, SciPy, scikit-learn — BSD-3-Clause
+
+Optional integrations (installed separately, not bundled):
+- ableton-mcp — Siddharth Ahuja — MIT License
+  https://github.com/ahujasid/ableton-mcp
+
+================================================================================
+COPYRIGHT & FAIR USE
+================================================================================
+
+Stemcell analyzes audio you provide. Stems, one-shots, and MIDI extracted from
+copyrighted recordings are intended for private study, analysis, and learning
+("reverse-engineering the craft"). Do not distribute or release material derived
+from recordings you do not have the rights to. For released music, use the
+Splice-matched licensed equivalents the tool helps you find.
