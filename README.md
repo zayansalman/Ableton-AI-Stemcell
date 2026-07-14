@@ -1,5 +1,11 @@
 # Ableton-AI-Stemcell 🧬
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org)
+[![Platform: macOS Apple Silicon](https://img.shields.io/badge/platform-macOS%20Apple%20Silicon-lightgrey.svg)](#requirements)
+[![Release: v0.1.0](https://img.shields.io/badge/release-v0.1.0-brightgreen.svg)](https://github.com/zayansalman/Ableton-AI-Stemcell/releases)
+[![Runs locally](https://img.shields.io/badge/audio-never%20leaves%20your%20machine-success.svg)](#)
+
 **Reverse-engineer any track and regrow it in Ableton.** Hand Stemcell a song and it dissects the audio itself — stems, tempo, key, drum one-shots, MIDI of every part — identifies the *gear* behind each sound, finds licensed look-alikes on Splice, generates catchy melodies and MK/Todd-Edwards-style vocal chops, and rebuilds the whole thing into a live Ableton project.
 
 It runs **entirely locally** (built and tested on Apple Silicon, M2 / 8 GB). No audio ever leaves your machine.
@@ -7,6 +13,8 @@ It runs **entirely locally** (built and tested on Apple Silicon, M2 / 8 GB). No 
 > **Not affiliated with, endorsed by, or sponsored by Ableton AG or Splice.com.** "Ableton", "Live", "Simpler" and "Splice" are trademarks of their respective owners. This is an independent, open-source hobby project that *integrates with* those tools.
 
 ---
+
+**Contents:** [What it does](#what-it-does) · [Example](#what-a-dissection-looks-like) · [Architecture](#architecture) · [Requirements](#requirements) · [Install](#install) · [Quickstart](#quickstart) · [Output](#output-contract) · [Claude Code](#use-with-claude-code) · [Limitations](#honest-limitations) · [Credits](#credits--licenses)
 
 ## What it does
 
@@ -18,6 +26,33 @@ It runs **entirely locally** (built and tested on Apple Silicon, M2 / 8 GB). No 
 | 🎤 **Vocal chops** | Chop a vocal → **MK-style** pitched offbeat stabs (Simpler Classic) and **Todd-Edwards-style** swung slice mosaics (Simpler Slice), matched to the track's scale/tempo |
 | 🔎 **Source on Splice** | Turns measured features + gear ID into text searches for licensed, royalty-free equivalents |
 | 🎛️ **Rebuild in Ableton** | Drives a live Ableton session via the `ableton-mcp` connector — sets tempo, makes tracks, writes the MIDI, imports samples |
+
+## What a dissection looks like
+
+Point it at a track and read `report.md`. Here's the shape of the output (illustrative — a deep-house cut at 123 BPM):
+
+```text
+Tempo:  123.0 BPM  (stability 0.98)
+Key:    C minor    (confidence 0.21 — low; relative Eb major is close)
+
+Stems        rms_db   activity   tags
+  drums       -14.9     0.95      bright, sub-heavy
+  bass        -24.7     0.55      warm/dark, sub-heavy
+  other       -28.4     0.88      punchy          ← Hammond organ (CLAP 0.60)
+  vocals      -37.9     0.13      punchy
+
+Drum one-shots        CLAP    count   gear read (inference)
+  kick_01 (sub)       —       ~400    tuned sine sub  ·  Splice: "deep house sub kick"
+  kick_02 (click)     909 .90 ~576    909-style click ·  Splice: "909 kick punchy"
+  hat_open_01         909 .46  702    909 vs sampled  ·  Splice: "soulful house open hat"
+  perc_01 (clap)      909 .78  173    dry clap/perc   ·  Splice: "soulful house clap dry"
+
+MIDI      notes   range    beat-align
+  bass    1947    36–62    0.79        ← cleanest; drop straight into Live
+  other   4347    36–91    0.79        ← harmonic sketch (catch-all stem)
+```
+
+Every number is *measured*, not guessed — and where it's a guess (the gear read), it says so. The full machine-readable `report.json` (schema v1) drives the Splice queries and the Ableton rebuild.
 
 ## Architecture
 
@@ -38,7 +73,7 @@ flowchart LR
     L[vocal sample] --> M[chop<br/>MK + Todd MIDI] --> K
 ```
 
-The pipeline writes a machine-readable `report.json` (schema v1); everything downstream is driven by measured values, never by re-listening. See [`docs/output-schema.md`](docs/output-schema.md).
+The pipeline writes a machine-readable `report.json` (schema v1); everything downstream is driven by measured values, never by re-listening. Deep dives: [`docs/architecture.md`](docs/architecture.md) · [`docs/output-schema.md`](docs/output-schema.md).
 
 ## Requirements
 
@@ -88,7 +123,7 @@ Stages cache by file-existence — re-running skips completed stages (`--force` 
 
 ## Use with Claude Code
 
-Stemcell is designed to be driven by an AI agent. The bundled `/dissect` skill ([`integrations/claude-skill/`](integrations/claude-skill/)) teaches [Claude Code](https://claude.com/claude-code) to run the pipeline, read `report.json`, identify gear, build Splice queries, and rebuild in Ableton — end to end from a single prompt.
+Stemcell is designed to be driven by an AI agent. The bundled `/dissect` skill ([`integrations/claude-skill/`](integrations/claude-skill/)) teaches [Claude Code](https://claude.com/claude-code) to run the pipeline, read `report.json`, identify gear, build Splice queries, generate chops, and rebuild in Ableton — end to end from a prompt like *"dissect this track"* or *"find sounds like this song"*.
 
 ## Honest limitations
 
@@ -97,6 +132,15 @@ Stemcell is designed to be driven by an AI agent. The bundled `/dissect` skill (
 - Full-mix stem transcription (esp. the `other` stem) is a harmonic *sketch*, not clean MIDI. The bass stem transcribes best.
 - The Live scripting API can't load a sample into a playable Simpler — vocal chops need **one manual drag** (documented in the emitted `README.txt`).
 - No synth-preset reverse-engineering; sliced hits from commercial recordings are for **reference/learning** — use the Splice-matched licensed equivalents in released music.
+
+## Documentation
+
+- [`docs/architecture.md`](docs/architecture.md) — the staged pipeline, the `Ctx` contract, caching & crash-safety
+- [`docs/output-schema.md`](docs/output-schema.md) — the full `report.json` schema and the `notes.json` note format
+- [`docs/ableton-integration.md`](docs/ableton-integration.md) — the connector, its limits, and the one-drag chop setup
+- [`docs/melody-methodology.md`](docs/melody-methodology.md) — the grounded hook-writing method
+- [`references/dance-gear-fingerprints.md`](references/dance-gear-fingerprints.md) — identify drum machines & synth presets from measured evidence
+- [`references/house-vocal-chop-craft.md`](references/house-vocal-chop-craft.md) — MK / Todd Edwards technique, scales, swing, generator rules
 
 ## Credits & Licenses
 
@@ -111,4 +155,4 @@ Stemcell is **MIT-licensed** (see [`LICENSE`](LICENSE)). It stands on excellent 
 | [transformers](https://github.com/huggingface/transformers), [PyTorch](https://pytorch.org) | model runtime | Apache-2.0 |
 | [ableton-mcp](https://github.com/ahujasid/ableton-mcp) (optional) | Live control | MIT |
 
-Contributions welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md). Full guides in the [Wiki](../../wiki) and [`docs/`](docs/).
+Contributions welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md).
